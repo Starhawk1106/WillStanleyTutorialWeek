@@ -22,14 +22,18 @@ public class MainActivity extends AppCompatActivity {
     private Button minus;
     private Button multiply;
     private Button divide;
+    private Button equal;
+    private Button clear;
     private TextView info;
     private TextView result;
     private final char ADDITION = '+';
     private final char SUBTRACTION = '-';
     private final char MULTIPLICATION = '*';
     private final char DIVISION = '/';
+    private final char EQU = 0;
     private double val1 = Double.NaN;
     private double val2;
+    private char ACTION;
 
 
 
@@ -124,9 +128,80 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-
+                compute();
+                ACTION = ADDITION;
+                result.setText(String.valueOf(val1) + "+");
+                info.setText(null);
             }
         });
+
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                compute();
+                ACTION = SUBTRACTION;
+                result.setText(String.valueOf(val1) + "-");
+                info.setText(null);
+            }
+        });
+
+        divide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                compute();
+                ACTION = DIVISION;
+                result.setText(String.valueOf(val1) + "/");
+                info.setText(null);
+            }
+        });
+
+        multiply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                compute();
+                ACTION = MULTIPLICATION;
+                result.setText(String.valueOf(val1) + "*");
+                info.setText(null);
+            }
+        });
+
+        equal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                compute();
+                ACTION = EQU;
+                result.setText(result.getText().toString() + String.valueOf(val2) + "=" + String.valueOf(val1));
+                info.setText(null);
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(info.getText().length() > 0)
+                {
+                    CharSequence name = info.getText().toString();
+                    info.setText(name.subSequence(0, name.length()-1));
+                    }
+                else
+                {
+                    val1 = Double.NaN;
+                    val2 = Double.NaN;
+                    info.setText(null);
+                    result.setText(null);
+                }
+
+                }
+
+        });
+
+
+
+
+
     }
 
     private void setupUIViews()
@@ -145,10 +220,40 @@ public class MainActivity extends AppCompatActivity {
         minus = (Button)findViewById(R.id.buttonMin);
         multiply = (Button)findViewById(R.id.buttonMult);
         divide = (Button)findViewById(R.id.buttonDiv);
+        equal = (Button)findViewById(R.id.buttonEqu);
         info = (TextView)findViewById(R.id.textInsert);
         result = (TextView)findViewById(R.id.textDisplay);
+        clear = (Button)findViewById(R.id.buttonClr);
 
 
+    }
+
+    private void compute()
+    {
+        if (!Double.isNaN(val1))
+        {
+            val2 = Double.parseDouble(info.getText().toString());
+
+            switch(ACTION)
+            {
+                case ADDITION:
+                    val1 += val2;
+                    break;
+                case SUBTRACTION:
+                    val1 -= val2;
+                    break;
+                case MULTIPLICATION:
+                    val1 *= val2;
+                    break;
+                case DIVISION:
+                    val1 /= val2;
+                    break;
+            }
+        }
+        else
+        {
+            val1 = Double.parseDouble(info.getText().toString());
+        }
     }
 
 }
